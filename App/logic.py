@@ -1,4 +1,9 @@
 import csv 
+from DataStructures.List import array_list as lt
+#from DataStructures.List import single_linked_list as lt
+from DataStructures.Queue import queue as q
+from DataStructures.Stack import stack as st
+
 csv.field_size_limit(2147483647)
 
 import time
@@ -8,7 +13,30 @@ def new_logic():
     Crea el catalogo para almacenar las estructuras de datos
     """
     #TODO: Llama a las funciónes de creación de las estructuras de datos
-    pass
+    catalog = {"origen": None,
+               "categoria_producto": None,
+               "categoria_estadistica": None,
+               "unidad_medida": None,
+               "departamento": None,
+               "ubicación": None,
+               "año_recoleccion": None,
+               "frecuencia_recoleccion": None,
+               "periodo_referencia": None,
+               "fecha_carga": None,
+               "valor": None
+               }
+    catalog["origen"] = lt.new_list()
+    catalog["categoria_producto"] = lt.new_list()
+    catalog["categoria_estadistica"] = lt.new_list()
+    catalog["unidad_medida"] = lt.new_list()
+    catalog["departamento"] = lt.new_list()
+    catalog["ubicación"] = lt.new_list()
+    catalog["año_recoleccion"] = lt.new_list()
+    catalog["frecuencia_recoleccion"] = lt.new_list()
+    catalog["periodo_referencia"] = lt.new_list()
+    catalog["fecha_carga"] = lt.new_list()
+    catalog["valor"] = lt.new_list()
+    return catalog
 
 
 # Funciones para la carga de datos
