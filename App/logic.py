@@ -13,29 +13,29 @@ def new_logic():
     Crea el catalogo para almacenar las estructuras de datos
     """
     #TODO: Llama a las funciónes de creación de las estructuras de datos
-    catalog = {"origen": None,
-               "categoria_producto": None,
-               "categoria_estadistica": None,
-               "unidad_medida": None,
-               "departamento": None,
-               "ubicación": None,
-               "año_recoleccion": None,
-               "frecuencia_recoleccion": None,
-               "periodo_referencia": None,
-               "fecha_carga": None,
-               "valor": None
+    catalog = {"source": None,
+               "commodity": None,
+               "statical_category": None,
+               "unit_measurement": None,
+               "state_name": None,
+               "location": None,
+               "year_collection": None,
+               "freq_collection": None,
+               "reference_period": None,
+               "load_time": None,
+               "value": None
                }
-    catalog["origen"] = lt.new_list()
-    catalog["categoria_producto"] = lt.new_list()
-    catalog["categoria_estadistica"] = lt.new_list()
-    catalog["unidad_medida"] = lt.new_list()
-    catalog["departamento"] = lt.new_list()
-    catalog["ubicación"] = lt.new_list()
-    catalog["año_recoleccion"] = lt.new_list()
-    catalog["frecuencia_recoleccion"] = lt.new_list()
-    catalog["periodo_referencia"] = lt.new_list()
-    catalog["fecha_carga"] = lt.new_list()
-    catalog["valor"] = lt.new_list()
+    catalog["source"] = lt.new_list()
+    catalog["commodity"] = lt.new_list()
+    catalog["statical_category"] = lt.new_list()
+    catalog["unit_measurement"] = lt.new_list()
+    catalog["state_name"] = lt.new_list()
+    catalog["location"] = lt.new_list()
+    catalog["year_collection"] = lt.new_list()
+    catalog["freq_collection"] = lt.new_list()
+    catalog["reference_period"] = lt.new_list()
+    catalog["load_time"] = lt.new_list()
+    catalog["value"] = lt.new_list()
     return catalog
 
 
@@ -46,7 +46,46 @@ def load_data(catalog, filename):
     Carga los datos del reto
     """
     # TODO: Realizar la carga de datos
-    pass
+    input_file = csv.DictReader(open(filename, encoding='utf-8'))
+    count = 0
+    año_max = 0
+    año_min = 0
+    last_five = []
+    first_five = []
+
+    for x in input_file:
+
+        lt.add_last(catalog["source"], x["source"])
+        lt.add_last(catalog["commodity"], x["commodity"])
+        lt.add_last(catalog["statical_category"], x["statical_category"])
+        lt.add_last(catalog["unit_measurement"], x["unit_measurement"])
+        lt.add_last(catalog["state_name"], x["state_name"])
+        lt.add_last(catalog["location"], x["location"])
+        lt.add_last(catalog["year_collection"], x["year_collection"])
+        lt.add_last(catalog["freq_collection"], x["freq_collection"])
+        lt.add_last(catalog["reference_period"], x["reference_period"])
+        lt.add_last(catalog["load_time"], x["load_time"])
+        lt.add_last(catalog["value"], x["value"])
+        
+        if int(x["year_collection"]) > año_max or año_max == 0:
+            año_max = int(x["year_collection"])
+        if int(x["year_collection"]) < año_min or año_min == 0:
+            año_min = int(x["year_collection"])
+        count += 1
+
+        datos_listas = {"year_collection": x["year_collection"],
+                        "load_time": x["load_time"],
+                        "state_name": x["state_name"],
+                        "source": x["source"],
+                        "unit_measurement": x["unit_measurement"],
+                        "value": x["value"]}
+        if count < 5:
+            first_five.append(datos_listas)
+        elif count >= 5:
+            last_five.append(datos_listas)
+            if len(last_five) > 5:
+                last_five.pop(0)
+    return count, año_min, año_max, last_five, first_five
 
 # Funciones de consulta sobre el catálogo
 
