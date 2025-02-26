@@ -1,6 +1,6 @@
 import csv 
 from DataStructures.List import array_list as lt
-#from DataStructures.List import single_linked_list as lt
+from DataStructures.List import single_linked_list as sl
 from DataStructures.Queue import queue as q
 from DataStructures.Stack import stack as st
 
@@ -45,47 +45,51 @@ def load_data(catalog, filename):
     """
     Carga los datos del reto
     """
-    # TODO: Realizar la carga de datos
-    input_file = csv.DictReader(open(filename, encoding='utf-8'))
-    count = 0
-    año_max = 0
-    año_min = 0
-    last_five = []
-    first_five = []
+    
+    with open(filename, mode = "r", encoding='utf-8') as file:
 
-    for x in input_file:
+        input_file = csv.DictReader(file)
+        count = 0
+        año_max = 0
+        año_min = 0
+        last_five = []
+        first_five = []
 
-        lt.add_last(catalog["source"], x["source"])
-        lt.add_last(catalog["commodity"], x["commodity"])
-        lt.add_last(catalog["statical_category"], x["statical_category"])
-        lt.add_last(catalog["unit_measurement"], x["unit_measurement"])
-        lt.add_last(catalog["state_name"], x["state_name"])
-        lt.add_last(catalog["location"], x["location"])
-        lt.add_last(catalog["year_collection"], x["year_collection"])
-        lt.add_last(catalog["freq_collection"], x["freq_collection"])
-        lt.add_last(catalog["reference_period"], x["reference_period"])
-        lt.add_last(catalog["load_time"], x["load_time"])
-        lt.add_last(catalog["value"], x["value"])
-        
-        if int(x["year_collection"]) > año_max or año_max == 0:
-            año_max = int(x["year_collection"])
-        if int(x["year_collection"]) < año_min or año_min == 0:
-            año_min = int(x["year_collection"])
-        count += 1
+        for x in input_file:
 
-        datos_listas = {"year_collection": x["year_collection"],
-                        "load_time": x["load_time"],
-                        "state_name": x["state_name"],
-                        "source": x["source"],
-                        "unit_measurement": x["unit_measurement"],
-                        "value": x["value"]}
-        if count < 5:
-            first_five.append(datos_listas)
-        elif count >= 5:
-            last_five.append(datos_listas)
-            if len(last_five) > 5:
-                last_five.pop(0)
-    return count, año_min, año_max, last_five, first_five
+            lt.add_last(catalog["source"], x["source"])
+            lt.add_last(catalog["commodity"], x["commodity"])
+            lt.add_last(catalog["statical_category"], x["statical_category"])
+            lt.add_last(catalog["unit_measurement"], x["unit_measurement"])
+            lt.add_last(catalog["state_name"], x["state_name"])
+            lt.add_last(catalog["location"], x["location"])
+            lt.add_last(catalog["year_collection"], x["year_collection"])
+            lt.add_last(catalog["freq_collection"], x["freq_collection"])
+            lt.add_last(catalog["reference_period"], x["reference_period"])
+            lt.add_last(catalog["load_time"], x["load_time"])
+            lt.add_last(catalog["value"], x["value"])
+            
+            if int(x["year_collection"]) > año_max or año_max == 0:
+                año_max = int(x["year_collection"])
+            if int(x["year_collection"]) < año_min or año_min == 0:
+                año_min = int(x["year_collection"])
+            count += 1
+
+            datos_listas = {"year_collection": x["year_collection"],
+                            "load_time": x["load_time"],
+                            "state_name": x["state_name"],
+                            "source": x["source"],
+                            "unit_measurement": x["unit_measurement"],
+                            "value": x["value"]}
+            if count < 5:
+                first_five.append(datos_listas)
+
+            elif count >= 5:
+                last_five.append(datos_listas)
+                if len(last_five) > 5:
+                    last_five.pop(0)
+
+        return count, año_min, año_max, last_five, first_five
 
 # Funciones de consulta sobre el catálogo
 
@@ -97,21 +101,57 @@ def get_data(catalog, id):
     pass
 
 
-def req_1(catalog):
-    """
-    Retorna el resultado del requerimiento 1
-    """
-    # TODO: Modificar el requerimiento 1
-    pass
+def ultimo_reg_año(catalog, año): #REQ 1
+
+#Tiempo_de_procesamiento #TODO
+
+    size = lt.size(catalog["year_collection"])
+    count = 0 
+    for x in range(size):
+        if int(lt.get_element(catalog["year_collection"], x)) == año:
+            count += 1
+            elem = x
+    if count == 0:
+        return None
+    else:
+        
+        year = lt.get_element(catalog["year_collection"], elem) #redunda pero uno nunca sabe
+        fecha_carga = lt.get_element(catalog["load_time"], elem)
+        tipo_fuente = lt.get_element(catalog["source"], elem)
+        frecuencia = lt.get_element(catalog["freq_collection"], elem)
+        estado = lt.get_element(catalog["state_name"], elem) #En la documentacion dice departamento 
+        tipo_producto = lt.get_element(catalog["commodity"], elem)
+        unidad_medicion = lt.get_element(catalog["unit_measurement"], elem)
+        valor_medicion = lt.get_element(catalog["value"], elem)
+
+        return count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
 
 
-def req_2(catalog):
-    """
-    Retorna el resultado del requerimiento 2
-    """
-    # TODO: Modificar el requerimiento 2
-    pass
+def ultimo_reg_estado(catalog, estado): #REQ 2
+    
+    #Tiempo_de_procesamiento #TODO
+    #preguntar si departamento es lo mismo q estado
 
+    size = lt.size(catalog["state_name"])
+    count = 0 
+    for x in range(size):
+        if lt.get_element(catalog["state_name"], x) == estado:
+            count += 1
+            elem = x
+    if count == 0:
+        return None
+    else:
+        
+        year = lt.get_element(catalog["year_collection"], elem) 
+        fecha_carga = lt.get_element(catalog["load_time"], elem)
+        tipo_fuente = lt.get_element(catalog["source"], elem)
+        frecuencia = lt.get_element(catalog["freq_collection"], elem)
+        estado = lt.get_element(catalog["state_name"], elem) 
+        tipo_producto = lt.get_element(catalog["commodity"], elem)
+        unidad_medicion = lt.get_element(catalog["unit_measurement"], elem)
+        valor_medicion = lt.get_element(catalog["value"], elem)
+
+        return count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
 
 def req_3(catalog):
     """
