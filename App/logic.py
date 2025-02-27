@@ -103,43 +103,47 @@ def get_data(catalog, id):
 
 def ultimo_reg_año(catalog, año): #REQ 1
 
-#Tiempo_de_procesamiento #TODO
-
+    tiempo1 = get_time()
     size = lt.size(catalog["year_collection"])
     count = 0 
+    result = True
     for x in range(size):
         if int(lt.get_element(catalog["year_collection"], x)) == año:
             count += 1
             elem = x
+
     if count == 0:
-        return None
+        result = None
     else:
         
-        year = lt.get_element(catalog["year_collection"], elem) #redunda pero uno nunca sabe
+        year = lt.get_element(catalog["year_collection"], elem) 
         fecha_carga = lt.get_element(catalog["load_time"], elem)
         tipo_fuente = lt.get_element(catalog["source"], elem)
         frecuencia = lt.get_element(catalog["freq_collection"], elem)
-        estado = lt.get_element(catalog["state_name"], elem) #En la documentacion dice departamento 
+        estado = lt.get_element(catalog["state_name"], elem) 
         tipo_producto = lt.get_element(catalog["commodity"], elem)
         unidad_medicion = lt.get_element(catalog["unit_measurement"], elem)
         valor_medicion = lt.get_element(catalog["value"], elem)
+        tiempo 
+        result = count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
 
-        return count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
-
+    tiempo2 = get_time()
+    tiempo = delta_time(tiempo1, tiempo2)
+    #Print tiempo, esto depende de como se desarolle el veiw
+    return tiempo, result
 
 def ultimo_reg_estado(catalog, estado): #REQ 2
     
-    #Tiempo_de_procesamiento #TODO
-    #preguntar si departamento es lo mismo q estado
-
+    tiempo1 = get_time()
     size = lt.size(catalog["state_name"])
     count = 0 
+    result = True
     for x in range(size):
         if lt.get_element(catalog["state_name"], x) == estado:
             count += 1
             elem = x
     if count == 0:
-        return None
+        result = None
     else:
         
         year = lt.get_element(catalog["year_collection"], elem) 
@@ -151,15 +155,18 @@ def ultimo_reg_estado(catalog, estado): #REQ 2
         unidad_medicion = lt.get_element(catalog["unit_measurement"], elem)
         valor_medicion = lt.get_element(catalog["value"], elem)
 
-        return count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
+        result = count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
+    tiempo2 = get_time()
+    tiempo = delta_time(tiempo1, tiempo2)
+    return tiempo, result
 
-def req_3(catalog):
+def reg_state_año(catalog, state, year_i, year_f): #REQ 3, year_i = año inicial, year_f = año final
+
     """
-    Retorna el resultado del requerimiento 3
+    Retorna el resultado del requerimiento 4
     """
-    # TODO: Modificar el requerimiento 3
+    # TODO: Modificar el requerimiento 4
     pass
-
 
 def req_4(catalog):
     """

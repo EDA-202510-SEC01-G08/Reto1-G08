@@ -1,13 +1,12 @@
 import sys
+import tabulate as tb
+import logic as lg
 default_limit = 1000
 sys.setrecursionlimit(default_limit*10)
 
 def new_logic():
-    """
-        Se crea una instancia del controlador
-    """
-    #TODO: Llamar la función de la lógica donde se crean las estructuras de datos
-    pass
+    
+    return lg.new_logic()
 
 def print_menu():
     print("Bienvenido")
@@ -23,11 +22,9 @@ def print_menu():
     print("0- Salir")
 
 def load_data(control):
-    """
-    Carga los datos
-    """
-    #TODO: Realizar la carga de datos
-    pass
+    
+    file = input("Ingrese el nombre del archivo a cargar: ")
+    lg.load_data(control, file)
 
 
 def print_data(control, id):
