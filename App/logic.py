@@ -162,11 +162,49 @@ def ultimo_reg_estado(catalog, estado): #REQ 2
 
 def reg_state_año(catalog, state, year_i, year_f): #REQ 3, year_i = año inicial, year_f = año final
 
-    """
-    Retorna el resultado del requerimiento 4
-    """
-    # TODO: Modificar el requerimiento 4
-    
+    tiempo1 = get_time()
+    count = 0
+    count_survey = 0
+    count_census = 0
+    size = lt.size(catalog["state_name"])
+    lista = []
+    result = True
+
+    for i in range(size):
+        year = int(lt.get_element(catalog["year_collection"], i))
+        estado = lt.get_element(catalog["state_name"], i)
+        if estado == state and year >= year_i and year <= year_f:
+            data = {"source": lt.get_element(catalog["source"], i),
+                        "year_collection": lt.get_element(catalog["year_collection"], i),
+                        "load_time": lt.get_element(catalog["load_time"], i),
+                        "freq_collection": lt.get_element(catalog["freq_collection"], i),
+                        "commodity": lt.get_element(catalog["commodity"], i),
+                        "unit_measurement": lt.get_element(catalog["unit_measurement"], i),
+                        }
+            lista.append(data)
+            count += 1
+        if lt.get_element(catalog["source"], i) == "Survey":
+            count_survey += 1
+        elif lt.get_element(catalog["source"], i) == "Census":
+            count_census += 1
+
+    if lista == []:
+        result = None
+   
+    elif len(lista) <= 20:
+        result = count, count_survey, count_census, lista
+   
+    elif len(lista) > 20:
+        recortada = lista[:5]
+        for i in range(-5,0):
+            recortada.append(lista[i]) #esto toca probarlo
+
+        result = count, count_survey, count_census, recortada
+   
+    tiempo2 = get_time()
+    tiempo = delta_time(tiempo1, tiempo2)
+    return tiempo, result
+
 
 def req_4(catalog, year_i, year_f, producto):
     """
@@ -234,12 +272,43 @@ def req_6(catalog, fecha_i, fecha_f, departamento):
     return tiempo, numero_total, count_census, count_survey, list_datos
 
 
-def req_7(catalog):
-    """
-    Retorna el resultado del requerimiento 7
-    """
-    # TODO: Modificar el requerimiento 7
-    pass
+def req_7(catalog, state, year_i, year_f):
+
+    tiempo1 = get_time()
+    count = 0
+    count_survey = 0
+    count_census = 0
+    size = lt.size(catalog["state_name"])
+    menor = 0
+    mayor = 0
+    valor_total = 0
+    count_no_validos = 0
+    result = True
+
+    for i in range(size):
+        year = int(lt.get_element(catalog["year_collection"], i))
+        estado = lt.get_element(catalog["state_name"], i)
+        if estado == state and year >= year_i and year <= year_f and lt.get_element(catalog["unit_measurement"], i) == "$":
+
+            if lt.get_element(catalog["value"], i) != "(D)":#Resolver
+
+                if lt.get_element(catalog["value"], i) < menor or menor == 0:
+                    menor = lt.get_element(catalog["value"], i)
+                elif lt.get_element(catalog["value"], i) > mayor or mayor == 0:
+                    mayor = lt.get_element(catalog["value"], i)
+                count += 1
+                valor_total += lt.get_element(catalog["value"], i)
+
+        if lt.get_element(catalog["source"], i) == "Survey":
+            count_survey += 1
+        elif lt.get_element(catalog["source"], i) == "Census":
+            count_census += 1
+        if lt.get_element(catalog["unit_measurement"], i) != "$":
+            count_no_validos += 1
+
+    tiempo2 = get_time()
+    tiempo = delta_time(tiempo1, tiempo2)
+    return tiempo, result
 
 
 def req_8(catalog):
