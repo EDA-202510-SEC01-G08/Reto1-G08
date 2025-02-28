@@ -1,15 +1,14 @@
 import sys
 import tabulate as tb
-import logic as lg
+from App import logic as lg
 default_limit = 1000
 sys.setrecursionlimit(default_limit*10)
 
 def new_logic():
-    
     return lg.new_logic()
 
 def print_menu():
-    print("Bienvenido")
+    print("\nBienvenido")
     print("1- Cargar información")
     print("2- Ejecutar Requerimiento 1")
     print("3- Ejecutar Requerimiento 2")
@@ -24,7 +23,8 @@ def print_menu():
 def load_data(control):
     
     file = input("Ingrese el nombre del archivo a cargar: ")
-    lg.load_data(control, file)
+    file_path = f"Data/{file}"  # Adjust the path to point to the Data directory
+    lg.load_data(control, file_path)
 
 
 def print_data(control, id):
@@ -39,7 +39,16 @@ def print_req_1(control):
         Función que imprime la solución del Requerimiento 1 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    año = int(input("Ingrese el año a consultar: "))
+    print("El último registro encontrado de ese año es: ")
+    result = lg.req_1(control, año)
+    if result == None:
+        print("no se encontraron registros")
+
+    else:
+        headers = ["Count", "Year", "Load date", "Categoria", "Frecuencia", "Estado", "Producto", "U. Medición", "Valor"]  
+        print(tb.tabulate(result, headers, tablefmt="pretty"))
+
 
 
 def print_req_2(control):
@@ -47,7 +56,10 @@ def print_req_2(control):
         Función que imprime la solución del Requerimiento 2 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 2
-    pass
+    
+    state = input("Ingrese el estado a consultar: ")
+    print("El último registro encontrado de ese estado es: ")
+    lg.req_2(control, state)
 
 
 def print_req_3(control):
@@ -55,7 +67,12 @@ def print_req_3(control):
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    pass
+
+    year_i = input("Ingrese el año inicial del rango en el cual desea revisar la información: ")
+    year_f = input("Ingrese el año final del rango en el cual desea revisar la información: ")
+    state = input("Ingrese el estado a consultar: ")
+
+    print(lg.req_3(control, state, year_i, year_f))
 
 
 def print_req_4(control):

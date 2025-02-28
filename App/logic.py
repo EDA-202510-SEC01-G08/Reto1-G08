@@ -3,6 +3,7 @@ from DataStructures.List import array_list as lt
 from DataStructures.List import single_linked_list as sl
 from DataStructures.Queue import queue as q
 from DataStructures.Stack import stack as st
+from datetime import datetime
 
 csv.field_size_limit(2147483647)
 
@@ -101,8 +102,11 @@ def get_data(catalog, id):
     pass
 
 
-def ultimo_reg_año(catalog, año): #REQ 1
-
+def req_1(catalog, año): 
+    """
+    Retorna el resultado del requerimiento 1
+    """
+    # TODO: Modificar el requerimiento 1
     tiempo1 = get_time()
     size = lt.size(catalog["year_collection"])
     count = 0 
@@ -124,16 +128,18 @@ def ultimo_reg_año(catalog, año): #REQ 1
         tipo_producto = lt.get_element(catalog["commodity"], elem)
         unidad_medicion = lt.get_element(catalog["unit_measurement"], elem)
         valor_medicion = lt.get_element(catalog["value"], elem)
-        tiempo 
-        result = count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
+        result = [[count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion]] 
 
     tiempo2 = get_time()
     tiempo = delta_time(tiempo1, tiempo2)
-    #Print tiempo, esto depende de como se desarolle el veiw
-    return tiempo, result
+    print("\nTiempo: " + str(tiempo) + " ms")
+    return result
 
-def ultimo_reg_estado(catalog, estado): #REQ 2
-    
+def req_2(catalog, estado): 
+    """
+    Retorna el resultado del requerimiento 2
+    """
+    # TODO: Modificar el requerimiento 2
     tiempo1 = get_time()
     size = lt.size(catalog["state_name"])
     count = 0 
@@ -158,10 +164,14 @@ def ultimo_reg_estado(catalog, estado): #REQ 2
         result = count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
     tiempo2 = get_time()
     tiempo = delta_time(tiempo1, tiempo2)
-    return tiempo, result
+    print(tiempo)
+    return result
 
-def reg_state_año(catalog, state, year_i, year_f): #REQ 3, year_i = año inicial, year_f = año final
-
+def req_3(catalog, state, year_i, year_f): 
+    """
+    Retorna el resultado del requerimiento 3
+    """
+    # TODO: Modificar el requerimiento 3
     tiempo1 = get_time()
     count = 0
     count_survey = 0
@@ -197,7 +207,7 @@ def reg_state_año(catalog, state, year_i, year_f): #REQ 3, year_i = año inicia
     elif len(lista) > 20:
         recortada = lista[:5]
         for i in range(-5,0):
-            recortada.append(lista[i]) #esto toca probarlo
+            recortada.append(lista[i]) 
 
         result = count, count_survey, count_census, recortada
    
