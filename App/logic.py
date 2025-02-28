@@ -180,7 +180,30 @@ def req_5(catalog, year_i, year_f, categoria):
     Retorna el resultado del requerimiento 5
     """
     # TODO: Modificar el requerimiento 5
-    
+    start_time = get_time()
+    list_datos = lt.new_list()
+    count_survey = 0
+    count_census = 0
+    pos = 0
+
+    while pos < len(catalog["source"]):
+        if catalog["year_collection"][pos] >= year_i and catalog["year_collection"][pos] <= year_f and catalog["statical_category"][pos] == categoria:
+            if catalog["source"][pos] == "SURVEY":
+                count_survey += 1
+            else: count_census += 1
+            lt.add_last(list_datos, [catalog["source"][pos], 
+                                 catalog["year_collection"][pos],
+                                 catalog["load_time"][pos],
+                                 catalog["freq_collection"][pos],
+                                 catalog["state_name"][pos],
+                                 catalog["unit_measurement"][pos],
+                                 catalog["commodity"][pos]])
+        pos += 1
+    numero_total = count_census + count_survey
+    end_time = get_time()
+    tiempo = delta_time(start_time, end_time)
+    return tiempo, numero_total, count_census, count_survey, list_datos
+
 def req_6(catalog, fecha_i, fecha_f, departamento):
     """
     Retorna el resultado del requerimiento 6
