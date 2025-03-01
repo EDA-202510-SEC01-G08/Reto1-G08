@@ -250,7 +250,15 @@ def req_5(catalog, year_i, year_f, categoria):
     numero_total = count_census + count_survey
     end_time = get_time()
     tiempo = delta_time(start_time, end_time)
-    return tiempo, numero_total, count_census, count_survey, list_datos
+    if list_datos == [] or len(list_datos) <= 20:
+        return tiempo, numero_total, count_census, count_survey, list_datos
+   
+    elif len(list_datos) > 20:
+        recortada = list_datos[:5]
+        for i in range(-5,0):
+            recortada.append(list_datos[i]) #esto toca probarlo
+
+        return tiempo, numero_total, count_census, count_survey, recortada
 
 def req_6(catalog, fecha_i, fecha_f, departamento):
     """
