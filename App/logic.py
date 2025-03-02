@@ -164,7 +164,7 @@ def req_2(catalog, estado):
         result = count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
     tiempo2 = get_time()
     tiempo = delta_time(tiempo1, tiempo2)
-    print(tiempo)
+    print("\nTiempo: " + str(tiempo) + " ms")    
     return result
 
 def req_3(catalog, state, year_i, year_f): 
@@ -221,6 +221,48 @@ def req_4(catalog, year_i, year_f, producto):
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
+    tiempo1 = get_time()
+    count = 0
+    count_survey = 0
+    count_census = 0
+    size = lt.size(catalog["commodity"])
+    lista = []
+    result = True
+
+    for i in range(size):
+        year = int(lt.get_element(catalog["year_collection"], i))
+        prod = lt.get_element(catalog["commodity"], i)
+        if prod == producto and year >= year_i and year <= year_f:
+            data = {"source": lt.get_element(catalog["source"], i),
+                        "year_collection": lt.get_element(catalog["year_collection"], i),
+                        "load_time": lt.get_element(catalog["load_time"], i),
+                        "freq_collection": lt.get_element(catalog["freq_collection"], i),
+                        "state_name": lt.get_element(catalog["state_name"], i),
+                        "unit_measurement": lt.get_element(catalog["unit_measurement"], i),
+                        }
+            lista.append(data)
+            count += 1
+        if lt.get_element(catalog["source"], i) == "Survey":
+            count_survey += 1
+        elif lt.get_element(catalog["source"], i) == "Census":
+            count_census += 1
+
+    if lista == []:
+        result = None
+   
+    elif len(lista) <= 20:
+        result = count, count_survey, count_census, lista
+   
+    elif len(lista) > 20:
+        recortada = lista[:5]
+        for i in range(-5,0):
+            recortada.append(lista[i]) 
+
+        result = count, count_survey, count_census, recortada
+   
+    tiempo2 = get_time()
+    tiempo = delta_time(tiempo1, tiempo2)
+    return tiempo, result
    
 
 def req_5(catalog, year_i, year_f, categoria):
@@ -250,6 +292,7 @@ def req_5(catalog, year_i, year_f, categoria):
     numero_total = count_census + count_survey
     end_time = get_time()
     tiempo = delta_time(start_time, end_time)
+
     if list_datos == [] or len(list_datos) <= 20:
         return tiempo, numero_total, count_census, count_survey, list_datos
    
