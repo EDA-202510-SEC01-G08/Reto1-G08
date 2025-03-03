@@ -161,7 +161,7 @@ def req_2(catalog, estado):
         unidad_medicion = lt.get_element(catalog["unit_measurement"], elem)
         valor_medicion = lt.get_element(catalog["value"], elem)
 
-        result = count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion 
+        result = [[count, year, fecha_carga, tipo_fuente, frecuencia, estado, tipo_producto, unidad_medicion, valor_medicion ]]
     tiempo2 = get_time()
     tiempo = delta_time(tiempo1, tiempo2)
     print("\nTiempo: " + str(tiempo) + " ms")    
@@ -202,18 +202,19 @@ def req_3(catalog, state, year_i, year_f):
         result = None
    
     elif len(lista) <= 20:
-        result = count, count_survey, count_census, lista
+        result = [[count, count_survey, count_census, lista]]
    
     elif len(lista) > 20:
         recortada = lista[:5]
         for i in range(-5,0):
             recortada.append(lista[i]) 
 
-        result = count, count_survey, count_census, recortada
+        result = [[count, count_survey, count_census, recortada]]
    
     tiempo2 = get_time()
     tiempo = delta_time(tiempo1, tiempo2)
-    return tiempo, result
+    print("\nTiempo: " + str(tiempo) + " ms")    
+    return result
 
 
 def req_4(catalog, year_i, year_f, producto):
@@ -251,18 +252,19 @@ def req_4(catalog, year_i, year_f, producto):
         result = None
    
     elif len(lista) <= 20:
-        result = count, count_survey, count_census, lista
+        result = [[count, count_survey, count_census, lista]]
    
     elif len(lista) > 20:
         recortada = lista[:5]
         for i in range(-5,0):
             recortada.append(lista[i]) 
 
-        result = count, count_survey, count_census, recortada
+        result = [[count, count_survey, count_census, recortada]]
    
     tiempo2 = get_time()
     tiempo = delta_time(tiempo1, tiempo2)
-    return tiempo, result
+    print("\nTiempo: " + str(tiempo) + " ms")    
+    return result
    
 
 def req_5(catalog, year_i, year_f, categoria):
@@ -275,6 +277,7 @@ def req_5(catalog, year_i, year_f, categoria):
     count_survey = 0
     count_census = 0
     pos = 0
+    result = True
 
     while pos < len(catalog["source"]):
         if catalog["year_collection"][pos] >= year_i and catalog["year_collection"][pos] <= year_f and catalog["statical_category"][pos] == categoria:
@@ -294,14 +297,17 @@ def req_5(catalog, year_i, year_f, categoria):
     tiempo = delta_time(start_time, end_time)
 
     if list_datos == [] or len(list_datos) <= 20:
-        return tiempo, numero_total, count_census, count_survey, list_datos
+        result = [[tiempo, numero_total, count_census, count_survey, list_datos]]
    
     elif len(list_datos) > 20:
         recortada = list_datos[:5]
         for i in range(-5,0):
             recortada.append(list_datos[i]) #esto toca probarlo
 
-        return tiempo, numero_total, count_census, count_survey, recortada
+        result = [[tiempo, numero_total, count_census, count_survey, recortada]]
+
+    print("\nTiempo: " + str(tiempo) + " ms")    
+    return result
 
 def req_6(catalog, fecha_i, fecha_f, departamento):
     """
@@ -313,6 +319,7 @@ def req_6(catalog, fecha_i, fecha_f, departamento):
     count_survey = 0
     count_census = 0
     pos = 0
+    result = True
 
     while pos < len(catalog["source"]):
         if catalog["load_time"][pos] >= fecha_i and catalog["load_time"][pos] <= fecha_f and catalog["state_name"][pos] == departamento:
@@ -328,9 +335,11 @@ def req_6(catalog, fecha_i, fecha_f, departamento):
                                  catalog["commodity"][pos]])
         pos += 1
     numero_total = count_census + count_survey
+    result = [[numero_total, count_census, count_survey, list_datos]]
     end_time = get_time()
     tiempo = delta_time(start_time, end_time)
-    return tiempo, numero_total, count_census, count_survey, list_datos
+    print("\nTiempo: " + str(tiempo) + " ms")    
+    return result
 
 
 def req_7(catalog, state, year_i, year_f):
@@ -347,6 +356,7 @@ def req_7(catalog, state, year_i, year_f):
     count_no_validos = 0
     registros_mayor = 0 
     registros_menor = 0
+    result = True
 
     for i in range(size):
         year = int(lt.get_element(catalog["year_collection"], i))
@@ -386,12 +396,14 @@ def req_7(catalog, state, year_i, year_f):
     if count == 0:
         return tiempo,count,None
     if year_mayor == year_menor:
-        result = (year_mayor, "MAYOR, MENOR", mayor, registros_mayor, count_no_validos, count_survey, count_census)
+        result = [[year_mayor, "MAYOR, MENOR", mayor, registros_mayor, count_no_validos, count_survey, count_census]]
     else:
-        result = ((year_mayor, "MAYOR", mayor, registros_mayor, count_no_validos, count_survey, count_census),
-            (year_menor, "MENOR", menor, registros_menor, count_no_validos, count_survey, count_census))
+        result = [[[[year_mayor, "MAYOR", mayor, registros_mayor, count_no_validos, count_survey, count_census]],
+            [[year_menor, "MENOR", menor, registros_menor, count_no_validos, count_survey, count_census]]]]
 
-    return tiempo,count, result
+    print("\nTiempo: " + str(tiempo) + " ms" + "\n")   
+    print("\nTotal registros en el filtro: " + str(count) + "\n")     
+    return result
 
 
 def req_8(catalog):

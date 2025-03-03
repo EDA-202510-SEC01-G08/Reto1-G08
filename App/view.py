@@ -59,7 +59,15 @@ def print_req_2(control):
     
     state = input("Ingrese el estado a consultar: ")
     print("El último registro encontrado de ese estado es: ")
-    lg.req_2(control, state)
+    result = lg.req_2(control, state)
+
+    if result == None:
+        print("no se encontraron registros")
+
+    else:
+        headers = ["Count", "Year", "Load date", "Categoria", "Frecuencia", "Estado", "Producto", "U. Medición", "Valor"]  
+        print(tb.tabulate(result, headers, tablefmt="pretty"))
+
 
 
 def print_req_3(control):
@@ -72,7 +80,12 @@ def print_req_3(control):
     year_f = input("Ingrese el año final del rango en el cual desea revisar la información: ")
     state = input("Ingrese el estado a consultar: ")
 
-    print(lg.req_3(control, state, year_i, year_f))
+    result =lg.req_3(control, state, year_i, year_f)
+
+    if result == None:
+        print("no se encontraron registros")
+
+
 
 
 def print_req_4(control):
@@ -80,7 +93,13 @@ def print_req_4(control):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    year_i = input("Ingrese el año inicial del rango en el cual desea revisar la información: ")
+    year_f = input("Ingrese el año final del rango en el cual desea revisar la información: ")
+    producto = input("Ingrese el tipo de producto a consultar: ")
+
+    result = lg.req_4(control,year_i, year_f, producto)
+    if result == None:
+        print("no se encontraron registros")
 
 
 def print_req_5(control):
