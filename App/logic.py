@@ -340,36 +340,58 @@ def req_7(catalog, state, year_i, year_f):
     count_survey = 0
     count_census = 0
     size = lt.size(catalog["state_name"])
-    menor = 0
-    mayor = 0
-    valor_total = 0
+    menor = None
+    mayor = None
+    year_menor = None
+    year_mayor = None
     count_no_validos = 0
-    result = True
+    registros_mayor = 0 
+    registros_menor = 0
 
     for i in range(size):
         year = int(lt.get_element(catalog["year_collection"], i))
         estado = lt.get_element(catalog["state_name"], i)
+        
         if estado == state and year >= year_i and year <= year_f and lt.get_element(catalog["unit_measurement"], i) == "$":
-
-            if lt.get_element(catalog["value"], i) != "(D)":#Resolver
-
-                if lt.get_element(catalog["value"], i) < menor or menor == 0:
-                    menor = lt.get_element(catalog["value"], i)
-                elif lt.get_element(catalog["value"], i) > mayor or mayor == 0:
-                    mayor = lt.get_element(catalog["value"], i)
+            
+            if "(" not in lt.get_element(catalog["value"], i):  
+                valor = float(lt.get_element(catalog["value"], i))  
                 count += 1
-                valor_total += lt.get_element(catalog["value"], i)
 
-        if lt.get_element(catalog["source"], i) == "Survey":
-            count_survey += 1
-        elif lt.get_element(catalog["source"], i) == "Census":
-            count_census += 1
-        if lt.get_element(catalog["unit_measurement"], i) != "$":
-            count_no_validos += 1
+                if menor is None or valor < menor:
+                    menor = valor
+                    year_menor = year
+                    registros_menor = 1  
+                elif valor == menor:
+                    registros_menor += 1  
+
+                if mayor is None or valor > mayor:
+                    mayor = valor
+                    year_mayor = year
+                    registros_mayor = 1  
+                elif valor == mayor:
+                    registros_mayor += 1
+ 
+            else:
+                count_no_validos += 1
+
+            if lt.get_element(catalog["source"], i) == "Survey":
+                count_survey += 1
+            elif lt.get_element(catalog["source"], i) == "Census":
+                count_census += 1   
 
     tiempo2 = get_time()
     tiempo = delta_time(tiempo1, tiempo2)
-    return tiempo, result
+
+    if count == 0:
+        return tiempo,count,None
+    if year_mayor == year_menor:
+        result = (year_mayor, "MAYOR, MENOR", mayor, registros_mayor, count_no_validos, count_survey, count_census)
+    else:
+        result = ((year_mayor, "MAYOR", mayor, registros_mayor, count_no_validos, count_survey, count_census),
+            (year_menor, "MENOR", menor, registros_menor, count_no_validos, count_survey, count_census))
+
+    return tiempo,count, result
 
 
 def req_8(catalog):
