@@ -84,6 +84,9 @@ def print_req_3(control):
 
     if result == None:
         print("no se encontraron registros")
+    else: 
+        headers = ["Count", "Count_Survey", "Count_Census", "Datos de cada Elemento"]
+        print(tb.tabulate(result, headers, tablefmt="pretty"))
 
 
 
@@ -100,6 +103,9 @@ def print_req_4(control):
     result = lg.req_4(control,year_i, year_f, producto)
     if result == None:
         print("no se encontraron registros")
+    else: 
+        headers = ["Count", "Count_Survey", "Count_Census", "Datos de cada elemento"]
+        print(tb.tabulate(result, headers, tblefmt="pretty"))
 
 
 def print_req_5(control):
@@ -107,7 +113,15 @@ def print_req_5(control):
         Función que imprime la solución del Requerimiento 5 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 5
-    pass
+    year_i = input("Ingrese el año inicial del rango en el cual desea revisar la información: ")
+    year_f = input("Ingrese el año final del rango en el cual desea revisar la información: ")
+    categoria = input("Ingrese la categoría estadistica que desea filtrar: ")
+    result = lg.req_5(control, year_i, year_f, categoria)
+    if result == None:
+        print("No se encontrardon datos con los filtros dados")
+    else: 
+        headers = ["Count", "Count_Census", "Count_Survey", "Datos de cada Elemento"]
+        print(tb.tabulate(result, headers, tablefmt="pretty"))
 
 
 def print_req_6(control):
@@ -115,7 +129,15 @@ def print_req_6(control):
         Función que imprime la solución del Requerimiento 6 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    fecha_i = input("Ingrese la fecha inicial desde la cual desea buscar: ")
+    fecha_f = input("Ingrese la fecha final hasta la cual desea buscar: ")
+    departamento = input("Ingrese el estado en el cual desea buscar los datos: ")
+    result = lg.req_6(control, fecha_i, fecha_f, departamento)
+    if result == None:
+        print("No se encontraron datos")
+    else:
+        headers = []
+        print(tb.tabulate(result, headers, tablefmt="pretty"))
 
 
 def print_req_7(control):
@@ -123,7 +145,15 @@ def print_req_7(control):
         Función que imprime la solución del Requerimiento 7 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    departamento = input("Ingrese el estado en el cual desea buscar los datos: ")
+    year_i = input("Ingrese el año inicial desde la cual desea buscar: ")
+    year_f = input("Ingrese el año final hasta el cual desea buscar: ")
+    result = lg.req_7(control, departamento, year_i, year_f)
+    if result == None:
+        print("No se encontraron datos")
+    else:
+        headers = []
+        print(tb.tabulate(result, headers, tablefmt="pretty"))
 
 
 def print_req_8(control):
