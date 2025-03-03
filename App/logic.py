@@ -394,9 +394,9 @@ def req_7(catalog, state, year_i, year_f):
     tiempo = delta_time(tiempo1, tiempo2)
 
     if count == 0:
-        return tiempo,count,None
+        return None
     if year_mayor == year_menor:
-        result = [[year_mayor, "MAYOR, MENOR", mayor, registros_mayor, count_no_validos, count_survey, count_census]]
+        result = [year_mayor, "MAYOR, MENOR", mayor, registros_mayor, count_no_validos, count_survey, count_census]
     else:
         result = [[[[year_mayor, "MAYOR", mayor, registros_mayor, count_no_validos, count_survey, count_census]],
             [[year_menor, "MENOR", menor, registros_menor, count_no_validos, count_survey, count_census]]]]

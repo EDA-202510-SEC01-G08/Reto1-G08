@@ -136,7 +136,7 @@ def print_req_6(control):
     if result == None:
         print("No se encontraron datos")
     else:
-        headers = []
+        headers = ["Count", "Count_Census", "Count_Survey", "Datos de cada Elemento"]
         print(tb.tabulate(result, headers, tablefmt="pretty"))
 
 
@@ -152,7 +152,7 @@ def print_req_7(control):
     if result == None:
         print("No se encontraron datos")
     else:
-        headers = []
+        headers = ["Año ", "Especificación del año", "Valor", "Registros", "Elementos no validos", "Count_Survey", "Count_Census"]
         print(tb.tabulate(result, headers, tablefmt="pretty"))
 
 
