@@ -293,9 +293,7 @@ def req_5(catalog, year_i, year_f, categoria):
                                  catalog["commodity"][pos]])
         pos += 1
     numero_total = count_census + count_survey
-    end_time = get_time()
-    tiempo = delta_time(start_time, end_time)
-
+    
     if list_datos == [] or len(list_datos) <= 20:
         result = [[tiempo, numero_total, count_census, count_survey, list_datos]]
    
@@ -305,7 +303,8 @@ def req_5(catalog, year_i, year_f, categoria):
             recortada.append(list_datos[i]) #esto toca probarlo
 
         result = [[tiempo, numero_total, count_census, count_survey, recortada]]
-
+    end_time = get_time()
+    tiempo = delta_time(start_time, end_time)
     print("\nTiempo: " + str(tiempo) + " ms")    
     return result
 
@@ -335,7 +334,15 @@ def req_6(catalog, fecha_i, fecha_f, departamento):
                                  catalog["commodity"][pos]])
         pos += 1
     numero_total = count_census + count_survey
-    result = [[numero_total, count_census, count_survey, list_datos]]
+    if list_datos == [] or len(list_datos) <= 20:
+        result = [[numero_total, count_census, count_survey, list_datos]]
+     
+    elif len(list_datos) > 20:
+        recortada = list_datos[:5]
+        for i in range(-5,0):
+            recortada.append(list_datos[i]) #esto toca probarlo
+
+        result = [[numero_total, count_census, count_survey, recortada]]
     end_time = get_time()
     tiempo = delta_time(start_time, end_time)
     print("\nTiempo: " + str(tiempo) + " ms")    
@@ -390,9 +397,7 @@ def req_7(catalog, state, year_i, year_f):
             elif lt.get_element(catalog["source"], i) == "Census":
                 count_census += 1   
 
-    tiempo2 = get_time()
-    tiempo = delta_time(tiempo1, tiempo2)
-
+    
     if count == 0:
         return None
     if year_mayor == year_menor:
@@ -400,6 +405,8 @@ def req_7(catalog, state, year_i, year_f):
     else:
         result = [[[[year_mayor, "MAYOR", mayor, registros_mayor, count_no_validos, count_survey, count_census]],
             [[year_menor, "MENOR", menor, registros_menor, count_no_validos, count_survey, count_census]]]]
+    tiempo2 = get_time()
+    tiempo = delta_time(tiempo1, tiempo2)
 
     print("\nTiempo: " + str(tiempo) + " ms" + "\n")   
     print("\nTotal registros en el filtro: " + str(count) + "\n")     
