@@ -261,33 +261,33 @@ def req_5(catalog, year_i, year_f, categoria):
     pos = 0
     result = True
 
-    while pos < len(catalog["source"]):
-        if catalog["year_collection"][pos] >= year_i and catalog["year_collection"][pos] <= year_f and catalog["statical_category"][pos] == categoria:
-        # como catalog es un array, no se puede buscar directamente como en el if de arriba, toca implementar funciones de busqueda
-            if catalog["source"][pos] == "SURVEY": #aca tampoco va a funcionar por lo mismo 
+    while pos < lt.size(catalog["source"]):
+        if catalog["year_collection"]["elements"][pos] >= year_i and catalog["year_collection"]["elements"][pos] <= year_f and catalog["statical_category"]["elements"][pos] == categoria:
+            if catalog["source"]["elements"][pos].upper() == "SURVEY":
                 count_survey += 1
             else: count_census += 1
-            lt.add_last(list_datos, [catalog["source"][pos], 
-                                 catalog["year_collection"][pos],
-                                 catalog["load_time"][pos],
-                                 catalog["freq_collection"][pos],# en ninguno de estos va a funcionar el codigo porque catalog es un array
-                                 catalog["state_name"][pos],
-                                 catalog["unit_measurement"][pos],
-                                 catalog["commodity"][pos]])
+            lt.add_last(list_datos, [catalog["source"]["elements"][pos], 
+                                 catalog["year_collection"]["elements"][pos],
+                                 catalog["load_time"]["elements"][pos],
+                                 catalog["freq_collection"]["elements"][pos],
+                                 catalog["state_name"]["elements"][pos],
+                                 catalog["unit_measurement"]["elements"][pos],
+                                 catalog["commodity"]["elements"][pos]])
         pos += 1
     numero_total = count_census + count_survey
     
-    if list_datos == [] or len(list_datos) <= 20: # list_datos como es array nunca va a estar vacio, siempre va a tener elements y size
-                                                #adicionalmente, aca necesitamos un return de none para que el programa sepa que no hay datos
-                                                #y poder retornar el mensaje correspondiente
-        result = [[tiempo, numero_total, count_census, count_survey, list_datos]] #Tiempo no va en este return porque se printea
-   
-    elif len(list_datos) > 20:
-        recortada = list_datos[:5] # list_datos es un array entonces este slicing no va a funcionar a menos que se use ["elements"]
-        for i in range(-5,0):
-            recortada.append(list_datos[i]) 
+    if list_datos == []: 
+        result = None
 
-        result = [[tiempo, numero_total, count_census, count_survey, recortada]]
+    elif lt.size(list_datos) <= 20:
+        result = [[numero_total, count_census, count_survey, list_datos]] #Tiempo no va en este return porque se printea
+   
+    elif lt.size(list_datos) > 20:
+        recortada = lt.new_list()
+        for i in range(-5,5):
+            lt.add_last(recortada, list_datos["elements"][i])
+
+        result = [[numero_total, count_census, count_survey, recortada]]
 
     end_time = get_time()
     tiempo = delta_time(start_time, end_time)
@@ -305,29 +305,31 @@ def req_6(catalog, fecha_i, fecha_f, departamento): # este requerimiento tiene l
     pos = 0
     result = True
 
-    while pos < len(catalog["source"]):
-        if catalog["load_time"][pos] >= fecha_i and catalog["load_time"][pos] <= fecha_f and catalog["state_name"][pos] == departamento:
-            if catalog["source"][pos] == "SURVEY":
+    while pos < lt.size(catalog["source"]):
+        if catalog["load_time"]["elements"][pos] >= fecha_i and catalog["load_time"]["elements"][pos] <= fecha_f and catalog["state_name"]["elements"][pos] == departamento:
+            if catalog["source"]["elements"][pos].upper() == "SURVEY":
                 count_survey += 1
             else: count_census += 1
-            lt.add_last(list_datos, [catalog["source"][pos], 
-                                 catalog["year_collection"][pos],
-                                 catalog["load_time"][pos],
-                                 catalog["freq_collection"][pos],
-                                 catalog["state_name"][pos],
-                                 catalog["unit_measurement"][pos],
-                                 catalog["commodity"][pos]])
+            lt.add_last(list_datos, [catalog["source"]["elements"][pos], 
+                                 catalog["year_collection"]["elements"][pos],
+                                 catalog["load_time"]["elements"][pos],
+                                 catalog["freq_collection"]["elements"][pos],
+                                 catalog["state_name"]["elements"][pos],
+                                 catalog["unit_measurement"]["elements"][pos],
+                                 catalog["commodity"]["elements"][pos]])
             
         pos += 1
     numero_total = count_census + count_survey
-    if list_datos == [] or len(list_datos) <= 20:
-        result = [[numero_total, count_census, count_survey, list_datos]]
-     
-    elif len(list_datos) > 20:
-        recortada = list_datos[:5]
-        for i in range(-5,0):
-            recortada.append(list_datos[i]) 
+    if list_datos == []: 
+        result = None
 
+    elif lt.size(list_datos) <= 20:
+        result = [[numero_total, count_census, count_survey, list_datos]] #Tiempo no va en este return porque se printea
+   
+    elif lt.size(list_datos) > 20:
+        recortada = lt.new_list()
+        for i in range(-5,5):
+            lt.add_last(recortada, list_datos["elements"][i])
         result = [[numero_total, count_census, count_survey, recortada]]
     end_time = get_time()
     tiempo = delta_time(start_time, end_time)
