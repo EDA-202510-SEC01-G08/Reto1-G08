@@ -262,7 +262,7 @@ def req_5(catalog, year_i, year_f, categoria):
     result = True
 
     while pos < lt.size(catalog["source"]):
-        if catalog["year_collection"]["elements"][pos] >= year_i and catalog["year_collection"]["elements"][pos] <= year_f and catalog["statical_category"]["elements"][pos] == categoria:
+        if int(catalog["year_collection"]["elements"][pos]) >= int(year_i) and int(catalog["year_collection"]["elements"][pos]) <= int(year_f) and catalog["statical_category"]["elements"][pos] == categoria:
             if catalog["source"]["elements"][pos].upper() == "SURVEY":
                 count_survey += 1
             else: count_census += 1
@@ -306,7 +306,7 @@ def req_6(catalog, fecha_i, fecha_f, departamento): # este requerimiento tiene l
     result = True
 
     while pos < lt.size(catalog["source"]):
-        if catalog["load_time"]["elements"][pos] >= fecha_i and catalog["load_time"]["elements"][pos] <= fecha_f and catalog["state_name"]["elements"][pos] == departamento:
+        if catalog["load_time"]["elements"][pos] >= fecha_i and catalog["load_time"]["elements"][pos] <= fecha_f and catalog["state_name"]["elements"][pos].upper() == departamento.upper():
             if catalog["source"]["elements"][pos].upper() == "SURVEY":
                 count_survey += 1
             else: count_census += 1
