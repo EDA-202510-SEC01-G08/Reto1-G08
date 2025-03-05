@@ -85,10 +85,10 @@ def print_req_3(control):
 
         print("\nNúmero de registros encontrados: ")
         headers1 = ["Count", "Count Survey", "Count Census"]
-        result1 = [lt.get_fist_element(result)]
+        result1 = [lt.get_element(result, lt.size(result)-1)]
         print(tb.tabulate(result1, headers1, tablefmt="pretty"))
         print(f"\nDatos de los registros encontrados para el estado de {state.title()} en el rango de años {year_i} a {year_f}: ")
-        result2 = lt.delete_element(result, 0)
+        result2 = lt.delete_element(result, lt.size(result)-1)
         headers2 = ["Fuente", "Year", "Load time", "Frequency", "Product", "U. Measurement"]
         result3 = result2["elements"]
         print(tb.tabulate(result3, headers2, tablefmt="pretty"))
@@ -108,9 +108,9 @@ def print_req_4(control):
     else: 
         print("\nNúmero de registros encontrados: ")
         headers1 = ["Count", "Count Survey", "Count Census"]
-        result1 = [lt.get_fist_element(result)]
+        result1 = [lt.get_element(result,lt.size(result)-1)]
         print(tb.tabulate(result1, headers1, tablefmt="pretty"))
-        result2 = lt.delete_element(result, 0)
+        result2 = lt.delete_element(result, lt.size(result)-1)
         print(f"\nDatos de los registros encontrados para el producto {producto.capitalize()} en el rango de años {year_i} a {year_f}: ")
         headers2 = ["Fuente", "Year", "Load time", "Frequency", "State", "U. Measurement"]
         result3 = result2["elements"]
