@@ -189,14 +189,14 @@ def req_3(catalog, state, year_i, year_f):
         result = None
     
     elif lt.size(lista) <= 20:
-        lt.add_first(lista, [count, count_survey, count_census])
+        lt.add_last(lista, [count, count_survey, count_census])
         result = lista
 
     else:
         recortada = lt.new_list()
         for i in range(-5,5):
-            lt.add_first(recortada, lt.get_element(lista, i))
-        lt.add_first(recortada, [count, count_survey, count_census])
+            lt.add_last(recortada, lt.get_element(lista, i))
+        lt.add_last(recortada, [count, count_survey, count_census])
         result = recortada
 
     tiempo2 = get_time()
@@ -240,14 +240,14 @@ def req_4(catalog, year_i, year_f, producto):
         result = None
    
     elif lt.size(lista) <= 20:
-        lt.add_first(lista, [count, count_survey, count_census])
+        lt.add_last(lista, [count, count_survey, count_census])
         result = lista
    
     else:
         recortada = lt.new_list()
         for i in range(-5,5):
-            lt.add_first(recortada, lt.get_element(lista, i))
-        lt.add_first(recortada, [count, count_survey, count_census])
+            lt.add_last(recortada, lt.get_element(lista, i))
+        lt.add_last(recortada, [count, count_survey, count_census])
         result = recortada
    
     tiempo2 = get_time()
