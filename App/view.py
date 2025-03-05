@@ -1,6 +1,12 @@
 import sys
 import tabulate as tb
 from App import logic as lg
+from DataStructures.List import array_list as lt
+from DataStructures.List import single_linked_list as sl
+from DataStructures.Queue import queue as q
+from DataStructures.Stack import stack as st
+from datetime import datetime
+
 default_limit = 1000
 sys.setrecursionlimit(default_limit*10)
 
@@ -22,7 +28,7 @@ def print_menu():
 
 def load_data(control):
     
-    file = input("Ingrese el nombre del archivo a cargar: ")
+    file = input("\nIngrese el nombre del archivo a cargar: ")
     file_path = f"Data/{file}" 
     lg.load_data(control, file_path)
 
@@ -37,14 +43,15 @@ def print_req_1(control):
 
     else:
         print(f"\nEl último registro encontrado del año {año} es: \n")
-        headers = ["Count", "Year", "Load date", "Categoria", "Frecuencia", "Estado", "Producto", "U. Medición", "Valor"]  
-        print(tb.tabulate(result, headers, tablefmt="pretty"))
+        resultt = result["elements"]
+        headers = ["Count", "Year", "Load date", "Fuente", "Frecuencia", "Estado", "Producto", "U. Medición", "Valor"]  
+        print(tb.tabulate(resultt, headers, tablefmt="pretty"))
 
 
 
 def print_req_2(control):
-    
-    state_input = input("Ingrese el estado a consultar: ")
+   
+    state_input = input("\nIngrese el estado a consultar: ")
     stateu = state_input.upper()
     statet = stateu.replace(" ", "")
     result = lg.req_2(control, statet)
@@ -54,31 +61,37 @@ def print_req_2(control):
 
     else:
         print(f"\nEl último registro encontrado para el estado de {state_input.title()} es: ")
-        headers = ["Count", "Year", "Load date", "Category", "Frecuencia", "Estado", "Producto", "U. Medición", "Valor"]  
+        headers = ["Count", "Year", "Load date", "Fuente", "Frecuencia", "Estado", "Producto", "U. Medición", "Valor"]  
+        result = result["elements"]
         print(tb.tabulate(result, headers, tablefmt="pretty"))
 
 
 
 def print_req_3(control):
 
-    year_i = int(input("Ingrese el año inicial del rango en el cual desea revisar la información: "))
+    year_i = int(input("\nIngrese el año inicial del rango en el cual desea revisar la información: "))
     year_f = int(input("Ingrese el año final del rango en el cual desea revisar la información: "))
     state = input("Ingrese el estado a consultar: ")
     stateu = state.upper()
     statet = stateu.replace(" ", "")
 
     result =lg.req_3(control, statet, year_i, year_f)
+
     if result == None:
-        print(f"No se encontraron registros para el estado de {state.title()} en el rango de años {year_i} a {year_f}")
-    else: 
+
+        print(f"\nNo se encontraron registros para el estado de {state.title()} en el rango de años {year_i} a {year_f}")
+
+    else:
+
         print("\nNúmero de registros encontrados: ")
         headers1 = ["Count", "Count Survey", "Count Census"]
-        result1 = [[result[0], result[1], result[2]]]
+        result1 = [lt.get_fist_element(result)]
         print(tb.tabulate(result1, headers1, tablefmt="pretty"))
         print(f"\nDatos de los registros encontrados para el estado de {state.title()} en el rango de años {year_i} a {year_f}: ")
-        headers2 = ["Category", "Year", "Load time", "Frequency", "Product", "U. Measurement"]
-        result2 = result[3]
-        print(tb.tabulate(result2, headers2, tablefmt="pretty"))
+        result2 = lt.delete_element(result, 0)
+        headers2 = ["Fuente", "Year", "Load time", "Frequency", "Product", "U. Measurement"]
+        result3 = result2["elements"]
+        print(tb.tabulate(result3, headers2, tablefmt="pretty"))
 
 
 def print_req_4(control):
@@ -89,77 +102,94 @@ def print_req_4(control):
     productou = producto.upper()
     productot = productou.replace(" ", "")
     result = lg.req_4(control,year_i, year_f, productot)
+
     if result == None:
         print(f"\nNo se encontraron registros para el producto {producto.capitalize()} en el rango de años {year_i} a {year_f}")
     else: 
         print("\nNúmero de registros encontrados: ")
         headers1 = ["Count", "Count Survey", "Count Census"]
-        result1 = [[result[0], result[1], result[2]]]
+        result1 = [lt.get_fist_element(result)]
         print(tb.tabulate(result1, headers1, tablefmt="pretty"))
+        result2 = lt.delete_element(result, 0)
         print(f"\nDatos de los registros encontrados para el producto {producto.capitalize()} en el rango de años {year_i} a {year_f}: ")
-        headers2 = ["Category", "Year", "Load time", "Frequency", "State", "U. Measurement"]
-        result2 = result[3]
-        print(tb.tabulate(result2, headers2, tablefmt="pretty"))
+        headers2 = ["Fuente", "Year", "Load time", "Frequency", "State", "U. Measurement"]
+        result3 = result2["elements"]
+        print(tb.tabulate(result3, headers2, tablefmt="pretty"))
 
 
 def print_req_5(control):
 
-    year_i = int(input("Ingrese el año inicial del rango en el cual desea revisar la información: "))
+    year_i = int(input("\nIngrese el año inicial del rango en el cual desea revisar la información: "))
     year_f = int(input("Ingrese el año final del rango en el cual desea revisar la información: "))
     categoria = input("Ingrese la categoría estadistica que desea filtrar: ")
     categoriau = categoria.upper()
     categoriat = categoriau.replace(" ", "")
-
     result = lg.req_5(control, year_i, year_f, categoriat)
 
     if result == None:
         print(f"No se encontraron registros para la categoría {categoria.capitalize()} en el rango de años {year_i} a {year_f}")
+
     else: 
-        headers = ["Count", "Count_Census", "Count_Survey", "Datos de cada Elemento"]
-        print(tb.tabulate(result, headers, tablefmt="pretty"))
+        print("\nNúmero de registros encontrados: ")
+        headers1 = ["Count", "Count Survey", "Count Census"]
+        result1 = [lt.get_fist_element(result)]
+        print(tb.tabulate(result1, headers1, tablefmt="pretty"))
+        result2 = lt.delete_element(result, 0)
+        print(f"\nDatos de los registros encontrados para la categoría {categoria.capitalize()} en el rango de años {year_i} a {year_f}: ")
+        headers = ["Fuente", "Year", "Load time", "Frequency", "State", "U. Measurement", "Product"]
+        result3 = result2["elements"] 
+        print(tb.tabulate(result3, headers, tablefmt="pretty"))
 
 
 def print_req_6(control):
 
-    fecha_i = input("Ingrese la fecha inicial desde la cual desea buscar: ")
-    fecha_f = input("Ingrese la fecha final hasta la cual desea buscar: ")
+    fecha_i = input("\nIngrese la fecha inicial desde la cual desea buscar en el formato YYYY-MM-DD: ")
+    fecha_f = input("Ingrese la fecha final hasta la cual desea buscar en el formato YYYY-MM-DD: ")
     departamento = input("Ingrese el estado en el cual desea buscar los datos: ")
-    result = lg.req_6(control, fecha_i, fecha_f, departamento)
+    departamento_u = departamento.upper()
+    departamento_t = departamento_u.replace(" ", "")
+
+    result = lg.req_6(control, fecha_i, fecha_f, departamento_t)
+
     if result == None:
-        print("No se encontraron datos")
+        print(f"\nNo se encontraron registros para el estado de {departamento.title()} en el rango de fechas {fecha_i} a {fecha_f}")
+
     else:
-        headers = ["Count", "Count_Census", "Count_Survey", "Datos de cada Elemento"]
-        print(tb.tabulate(result, headers, tablefmt="pretty"))
+        print(f"\nNúmero de registros encontrados: ")
+        headers1 = ["Count", "Count Survey", "Count Census"]
+        result1 = [lt.get_fist_element(result)]
+        print(tb.tabulate(result1, headers1, tablefmt="pretty"))
+        result2 = lt.delete_element(result, 0)
+        print(f"\nDatos de los registros encontrados para el estado de {departamento.title()} en el rango de fechas {fecha_i} a {fecha_f}: ")
+        headers2 = ["Fuente", "Year", "Load time", "Frequency", "State", "U. Measurement", "Product"]
+        result3 = result2["elements"]
+        print(tb.tabulate(result3, headers2, tablefmt="pretty"))
 
 
 def print_req_7(control):
 
-    estado = input("Ingrese el estado en el cual desea buscar los datos: ")
+    estado = input("\nIngrese el estado en el cual desea buscar los datos: ")
     estadou = estado.upper()
     estadot = estadou.replace(" ", "")
     year_i = int(input("Ingrese el año inicial desde la cual desea buscar: "))
     year_f = int(input("Ingrese el año final hasta el cual desea buscar: "))
-    result = lg.req_71(control, estadot, year_i, year_f)
-    # OJO CON MANDAR REQ_71
+    result = lg.req_7(control, estadot, year_i, year_f)
 
     if result == None:
-        print(f"No se encontraron datos para el estado de {estado.title()} en el rango de años {year_i} a {year_f}")
+        print(f"\nNo se encontraron datos para el estado de {estado.title()} en el rango de años {year_i} a {year_f}")
     else:
-        print(f"\nDatos del registro con MENOR ingreso para el estado de {estado.title()} en el rango de años {year_i} a {year_f}: ")
-        headers1 = ["Count", "Count periodo", "Count no validos", "Count survey", "Count census"]
-        result1 = [[result[0][0], result[0][1], result[0][2], result[0][3], result[0][4]]]
-        print(tb.tabulate(result1, headers1, tablefmt="pretty"))
-        headers2 = ["Año", "Categoría", "Valor"]
-        result2 = [[result[0][5], result[0][6], result[0][7]]]
-        print(tb.tabulate(result2, headers2, tablefmt="pretty"))
-
-        print(f"\nDatos del registro con MAYOR ingreso para el estado de {estado.title()} en el rango de años {year_i} a {year_f}: ")
-        headers3 = ["Count", "Count periodo", "Count no validos", "Count survey", "Count census"]
-        result3 = [[result[1][0], result[1][1], result[1][2], result[1][3], result[1][4]]]
-        print(tb.tabulate(result3, headers3, tablefmt="pretty"))
-        headers4 = ["Año", "Categoría", "Valor"]
-        result4 = [[result[1][5], result[1][6], result[1][7]]]
-        print(tb.tabulate(result4, headers4, tablefmt="pretty"))
+        if len(result) == 1:
+            print(f"\nEl estado de {estado.title()} no presenta variaciones en el rango de años {year_i} a {year_f}")
+            headers1 = ["Year", "Valor", "Count", "Count no validos", "Survey", "Census"]
+            print(tb.tabulate(result,headers1, tablefmt="pretty"))
+        else:
+            print(f"\nEl año con MAYOR ingreso para el estado de {estado.title()} en el rango de años {year_i} a {year_f} es: ")
+            headers1 = ["Year", "Valor", "Registros del año", "Count no validos", "Survey", "Census"]
+            result1 = [result[1]]
+            print(tb.tabulate(result1, headers1,tablefmt="pretty"))
+            result2 = [result[0]]
+            print(f"\nEl año con MENOR ingreso para el estado de {estado.title()} en el rango de años {year_i} a {year_f} es: ")
+            print(tb.tabulate(result2, headers1,tablefmt="pretty"))
         
 
 
