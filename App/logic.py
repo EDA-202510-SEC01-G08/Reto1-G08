@@ -387,7 +387,7 @@ def req_7(catalog, state, year_i, year_f):
                 elif lt.get_element(catalog["source"], j).upper() == "CENSUS":
                     count_census += 1
 
-                if "(" not in lt.get_element(catalog["value"], j):
+                if "(" not in lt.get_element(catalog["value"], j) and lt.get_element(catalog["unit_measurement"], j) == "$":
                     
                     if estadot == state: #Toda esta mano de if's por la cantidad de counts
                         valor = round(float(lt.get_element(catalog["value"], j).replace(",","")),2)
